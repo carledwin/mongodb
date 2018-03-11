@@ -1,5 +1,7 @@
 package com.wordpress.carledwinj.productapimongodb.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -41,5 +43,10 @@ public class CustomerDAO implements CustomerRepository {
 		final Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(id));
 		return this.mongoTemplate.findOne(query, Customer.class);
+	}
+
+	@Override
+	public List<Customer> findAll() {
+		return this.mongoTemplate.findAll(Customer.class);
 	}
 }

@@ -1,11 +1,14 @@
 package com.wordpress.carledwinj.productapimongodb.repository;
 
+import java.util.List;
+
 import com.wordpress.carledwinj.productapimongodb.model.Customer;
 
 public interface CustomerRepository {
 
-    public void create(final Customer customer);
-    public void update(final Customer customer);
-    public void delete(final String id);
-    public Customer findById(final String id);
+    void create(final Customer customer);
+    void update(final Customer customer);
+    void delete(final String id);
+    Customer findById(final String id);
+    List<Customer> findAll();
 }
