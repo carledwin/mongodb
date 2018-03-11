@@ -11,4 +11,5 @@ public interface CustomerRepository {
     void delete(final String id);
     Customer findById(final String id);
     List<Customer> findAll();
+    void createAll(final Customer[] customers);
 }

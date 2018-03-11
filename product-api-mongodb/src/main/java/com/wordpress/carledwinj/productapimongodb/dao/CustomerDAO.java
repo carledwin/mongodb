@@ -1,5 +1,6 @@
 package com.wordpress.carledwinj.productapimongodb.dao;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +49,13 @@ public class CustomerDAO implements CustomerRepository {
 	@Override
 	public List<Customer> findAll() {
 		return this.mongoTemplate.findAll(Customer.class);
+	}
+
+	@Override
+	public void createAll(final Customer[] customers) {
+		
+		List<Customer> list = Arrays.asList(customers);
+		
+		this.mongoTemplate.insertAll(list);
 	}
 }
