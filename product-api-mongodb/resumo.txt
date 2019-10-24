@@ -1,0 +1,94 @@
+
+
+link: https://www.mongodb.com/download-center/community aba server
+
+https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1604-3.2.22.tgz
+
+descompactar e rodar o arquivo mongod da pasta bin
+
+sudo Documents/MongoDB/database/mongodb-linux-x86_64-ubuntu1604-3.2.22/bin/mongod
+
+***desinstalar o mongodb
+sudo apt-get autoremove --purge mongodb
+
+:wq - salvar
+:q - sair
+:q! - sair sem salvar
+
+informar onde eu quero criar a pasta data/db
+/home/carledwin/Documents/MongoDB/database/data/db
+
+passar o path do banco de dados para mudar 
+mongod --dbpath <path to data directory>
+mongod --dbpath /home/carledwin/Documents/MongoDB/database/data/db
+
+inicializar o mongodb em outra porta (defaut 27017)
+sudo Documents/MongoDB/database/mongodb-linux-x86_64-ubuntu1604-3.2.22/bin/mongod --dbpath /home/carledwin/Documents/MongoDB/database/data/db --port 27018
+
+com o servidor rodando vamos em outro terminal
+cd Documents/MongoDB/database/mongodb-linux-x86_64-ubuntu1604-3.2.22/bin
+pwd
+vi .bash_profile
+export PATH=$PATH:/home/carledwin/Documents/MongoDB/database/mongodb-linux-x86_64-ubuntu1604-3.2.22/bin
+:wq
+
+so mongo pois configuramos o path
+em outro terminal em qualquer diretório
+executar o shell do mongo --port 27018
+
+criar uma collection
+db.createCollection("alunos")
+
+inserindo um registro (objeto java escript)
+db.alunos.insert({"nome":"Carl Edwin", "data_nascimento": new Date(1983, 02, 27),
+ "curso": {
+ "nome": "Análise de Sistemas"
+ }, 
+ "notas":[
+ 10.0, 9.0, 7.5],
+ "habilidades": [
+ {"nome": "inglês", "nível": "intermediário"},
+ {"nome": "Português", "nível": "avançado"}
+ ]
+ })
+
+
+consulta todos os alunos
+db.alunos.find()
+db.alunos.find({ "_id" : ObjectId("5db0f76671321acc81d60972")}) consultar por id
+db.alunos.find().pretty() organizada
+db.alunos.find({nome: "Fulano de Tal"}).pretty() consulta com filtro, se não existir retorna nada
+
+update
+db.alunos.update({idade: 45}, {nome: "Terino Alterado"}) subistitui todo o objeto
+db.alunos.update({idade: 45}, { $set: {nome: "Terino Alterado"}}) altera somente o campo setado para alteração e somente o primeiro registro encontrado
+db.alunos.update({nome: "Terino Alterado De Ache"}, {$set: {nome: "Terino Ache"}}, {multi: true}) altera somente o campo setado para todos os registros encontrados
+ 
+update / acrescentando item na lista de um array com $push
+db.alunos.update({"_id" : ObjectId("5db0f76671321acc81d60972")}, {$push: {notas: 5.5}}) insere uma nota por vez
+db.alunos.update({"_id" : ObjectId("5db0f76671321acc81d60972")}, {$push: {notas: {
+$each: [7.3, 6.9]
+}}}) insere varias notas de uma só vez
+
+consulta notas iguais a 4
+ db.alunos.find({notas: 4})
+
+consulta notas maiores que 8.5 greater than $gt:
+db.alunos.find({notas: { $gt: 8.5}})
+
+para consultar somente um com a nota maior que 8.5 use o findOne()
+db.alunos.findOne({notas: { $gt: 8.5}})
+
+consultar de forma ordenada e crescente usando o campo nome
+db.alunos.find({notas: { $gt: 8.5}}).sort({"nome": 1})
+
+consultar de forma ordenada na ordem contrária (decrescente)
+db.alunos.find({notas: { $gt: 8.5}}).sort({"nome": -1})
+
+acrescentar um campo  em um registro existente
+db.alunos.update({ "_id" : ObjectId("5db0f76671321acc81d60972")}, {$set: {localizacao: {endereco: "Rua Java 6554"}}})
+db.alunos.update({ "_id" : ObjectId("5db0f76671321acc81d60972")}, {$set: {"localizacao.coordenadas": [-232332323, -444454333]}})
+db.alunos.update({ "_id" : ObjectId("5db0f76671321acc81d60972")}, {$set: {"localizacao.cidade": "São Paulo"}})
+
+db.alunos.find().pretty().limit(1)
+
